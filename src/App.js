@@ -1,13 +1,21 @@
 import React, { Component } from "react";
 import Modal from "./components/Modal";
+import Searchbar from "./components/Searchbar";
+import { ToastContainer } from "react-toastify";
+import ImageGallery from "./components/ImageGallery";
 
 class App extends Component {
   state = {
     showModal: false,
+    images: "",
   };
 
   toggleModal = () => {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
+  };
+
+  handleSearchSubmit = (images) => {
+    this.setState({ images });
   };
 
   render() {
@@ -27,6 +35,9 @@ class App extends Component {
             </button>
           </Modal>
         )}
+        <Searchbar onSubmit={this.handleSearchSubmit} />
+        <ToastContainer />
+        <ImageGallery images={this.state.images} />
       </div>
     );
   }
