@@ -7,15 +7,15 @@ import ImageGallery from "./components/ImageGallery";
 class App extends Component {
   state = {
     showModal: false,
-    images: "",
+    searchImages: "",
   };
 
   toggleModal = () => {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
   };
 
-  handleSearchSubmit = (images) => {
-    this.setState({ images });
+  handleSearchSubmit = (searchImages) => {
+    this.setState({ searchImages });
   };
 
   render() {
@@ -37,7 +37,7 @@ class App extends Component {
         )}
         <Searchbar onSubmit={this.handleSearchSubmit} />
         <ToastContainer />
-        <ImageGallery images={this.state.images} />
+        <ImageGallery searchImages={this.state.searchImages} />
       </div>
     );
   }

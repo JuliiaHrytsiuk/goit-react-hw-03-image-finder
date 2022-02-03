@@ -9,21 +9,21 @@ import "react-toastify/dist/ReactToastify.css";
 
 class Searchbar extends Component {
   state = {
-    images: "",
+    searchImages: "",
   };
 
   handleInputChange = (event) => {
-    this.setState({ images: event.currentTarget.value.toLowerCase() });
+    this.setState({ searchImages: event.currentTarget.value.toLowerCase() });
   };
 
   handleSubmit = (event) => {
     event.preventDefault();
 
-    if (this.state.images.trim() === "") {
+    if (this.state.searchImages.trim() === "") {
       return toast("Что искать?");
     }
-    this.props.onSubmit(this.state.images);
-    this.setState({ images: "" });
+    this.props.onSubmit(this.state.searchImages);
+    this.setState({ searchImages: "" });
   };
 
   render() {
@@ -39,7 +39,7 @@ class Searchbar extends Component {
             autoComplete="off"
             autoFocus
             placeholder="Search images and photos"
-            value={this.state.images}
+            value={this.state.searchImages}
             onChange={this.handleInputChange}
           />
         </SearchForm>
