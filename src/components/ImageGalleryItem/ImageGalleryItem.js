@@ -1,11 +1,19 @@
-import React from "react";
+import PropTypes from "prop-types";
 
-const ImageGalleryItem = ({ webformatURL, key }) => {
+const ImageGalleryItem = ({ data }) => {
+  const { webformatURL, tags } = data;
+
   return (
-    <li key={key}>
-      <img src={webformatURL} width="240" />
+    <li>
+      <img src={webformatURL} alt={tags} />
     </li>
   );
 };
 
+ImageGalleryItem.propTypes = {
+  data: PropTypes.shape({
+    webformatURL: PropTypes.string.isRequired,
+    tags: PropTypes.string.isRequired,
+  }),
+};
 export default ImageGalleryItem;
