@@ -4,6 +4,8 @@ import Searchbar from "./components/Searchbar";
 import { ToastContainer, toast } from "react-toastify";
 import ImageGallery from "./components/ImageGallery";
 import fetchApi from "./components/servises/api";
+import Loader from "./components/Loader";
+import Button from "./components/Button";
 
 class App extends Component {
   state = {
@@ -12,19 +14,28 @@ class App extends Component {
     images: [],
     status: "idle",
     page: 1,
+    imageModal: null,
+    tags: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
     const query = this.state.searchImages;
-    if (prevProps.searchImages !== query) {
+    if (prevState.searchImages !== query) {
+      this.setState({ images: [] });
       this.fetchImages();
+    }
+    if (this.state.page >= 1) {
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: "smooth",
+      });
     }
   }
 
   fetchImages = () => {
+    this.setState({ status: "pending" });
     const query = this.state.searchImages;
     const page = this.state.page;
-    // this.setState({ status: "pending" });
 
     fetchApi(query, page)
       .then((data) => {
@@ -32,21 +43,26 @@ class App extends Component {
       })
       .then((images) => {
         if (images.length === 0) {
-          toast.error("Упс! 😮 Ничего не найдено...");
+          toast.error("😮 Ничего не найдено...");
+          this.setState({ status: "rejected" });
           return;
         }
+
         return this.setState((prevState) => {
           return {
-            images: [...images],
+            images: [...prevState.images, ...images],
+            page: page + 1,
             status: "resolved",
+            scroll: true,
           };
         });
       })
       .catch((error) => this.setState({ error, status: "rejected" }));
   };
 
-  toggleModal = () => {
+  toggleModal = (largeImageURL, tags) => {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
+    this.setState({ imageModal: largeImageURL, tags: tags });
   };
 
   handleSearchSubmit = (searchImages) => {
@@ -54,28 +70,26 @@ class App extends Component {
   };
 
   render() {
-    const { showModal, images, error, status } = this.state;
+    const { showModal, images, status, imageModal, tags } = this.state;
 
     return (
       <div>
-        <button type="button" onClick={this.toggleModal}>
-          Открыть модалку
-        </button>
         {showModal && (
           <Modal onClose={this.toggleModal}>
-            <h1>Juliia</h1>
-            <p>You are so fascinated</p>
-            <button type="button" onClick={this.toggleModal}>
-              Close
-            </button>
+            <img src={imageModal} alt={tags} />
           </Modal>
         )}
         <Searchbar onSubmit={this.handleSearchSubmit} />
-        <ToastContainer />
-        {status === "idle" && <div>Введите, что Вы ищите!</div>}
-        {status === "pending" && <div>Загружаем...</div>}
-        {status === "rejected" && <div>Что-то пошло не так.</div>}
-        {status === "resolved" && <ImageGallery images={images} />}
+
+        {status === "idle" && <ToastContainer />}
+        {status === "pending" && <Loader />}
+        {status === "rejected" && <ToastContainer />}
+        {status === "resolved" && (
+          <ImageGallery images={images} onClick={this.toggleModal} />
+        )}
+        {status === "resolved" && images.length >= 11 && (
+          <Button onClick={this.fetchImages} />
+        )}
       </div>
     );
   }

@@ -1,8 +1,10 @@
 import { Component } from "react";
 import {
+  SearchContainer,
   SearchForm,
   SearchFormButton,
   SearchFormInput,
+  SearchFormLabel,
 } from "./Searchbar.styled";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -28,12 +30,11 @@ class Searchbar extends Component {
 
   render() {
     return (
-      <header>
+      <SearchContainer>
         <SearchForm onSubmit={this.handleSubmit}>
           <SearchFormButton type="submit">
-            <span>Search</span>
+            <SearchFormLabel>Search</SearchFormLabel>
           </SearchFormButton>
-
           <SearchFormInput
             type="text"
             autoComplete="off"
@@ -43,7 +44,7 @@ class Searchbar extends Component {
             onChange={this.handleInputChange}
           />
         </SearchForm>
-      </header>
+      </SearchContainer>
     );
   }
 }

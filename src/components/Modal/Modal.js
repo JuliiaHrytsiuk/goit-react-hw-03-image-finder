@@ -2,7 +2,6 @@ import React from "react";
 import { createPortal } from "react-dom";
 import PropTypes from "prop-types";
 import { ModalContent, ModalBackdrop } from "./Modal.styled";
-// import { render } from "@testing-library/react";
 import { Component } from "react/cjs/react.production.min";
 
 const modalRoot = document.querySelector("#modal-root");
@@ -40,8 +39,8 @@ class Modal extends Component {
   }
 }
 
-// Modal.propTypes = {
-//   children: PropTypes.node,
-// };
+Modal.propTypes = {
+  children: PropTypes.node,
+};
 
 export default Modal;
