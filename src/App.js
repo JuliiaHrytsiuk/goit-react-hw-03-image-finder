@@ -14,8 +14,10 @@ class App extends Component {
     images: [],
     status: "idle",
     page: 1,
+    perPage: 11,
     imageModal: null,
     tags: null,
+    totalImages: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -43,7 +45,12 @@ class App extends Component {
       })
       .then((images) => {
         if (images.length === 0) {
-          toast.error("😮 Ничего не найдено...");
+          toast.error(" Ничего не найдено...");
+          this.setState({ status: "rejected" });
+          return;
+        }
+        if (images.length === this.state.totalImages) {
+          toast.error("Больше нету картинок");
           this.setState({ status: "rejected" });
           return;
         }
@@ -70,7 +77,7 @@ class App extends Component {
   };
 
   render() {
-    const { showModal, images, status, imageModal, tags } = this.state;
+    const { showModal, images, status, imageModal, tags, perPage } = this.state;
 
     return (
       <div>
@@ -85,9 +92,12 @@ class App extends Component {
         {status === "pending" && <Loader />}
         {status === "rejected" && <ToastContainer />}
         {status === "resolved" && (
-          <ImageGallery images={images} onClick={this.toggleModal} />
+          <>
+            <ImageGallery images={images} onClick={this.toggleModal} />
+          </>
         )}
-        {status === "resolved" && images.length >= 11 && (
+
+        {images.length > perPage && images.length < images.totalImages && (
           <Button onClick={this.fetchImages} />
         )}
       </div>
