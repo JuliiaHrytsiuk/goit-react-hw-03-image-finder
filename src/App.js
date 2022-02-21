@@ -49,12 +49,6 @@ class App extends Component {
           this.setState({ status: "rejected" });
           return;
         }
-        if (images.length === this.state.totalImages) {
-          toast.error("Больше нету картинок");
-          this.setState({ status: "rejected" });
-          return;
-        }
-
         return this.setState((prevState) => {
           return {
             images: [...prevState.images, ...images],
@@ -97,8 +91,8 @@ class App extends Component {
           </>
         )}
 
-        {images.length > perPage && images.length < images.totalImages && (
-          <Button onClick={this.fetchImages} />
+        {images.length > 0 && images.length % 12 === 0 && (
+          <Button onClick={this.fetchImages}></Button>
         )}
       </div>
     );
