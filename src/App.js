@@ -81,7 +81,6 @@ class App extends Component {
           </Modal>
         )}
         <Searchbar onSubmit={this.handleSearchSubmit} />
-
         {status === "idle" && <ToastContainer />}
         {status === "pending" && <Loader />}
         {status === "rejected" && <ToastContainer />}
@@ -90,7 +89,6 @@ class App extends Component {
             <ImageGallery images={images} onClick={this.toggleModal} />
           </>
         )}
-
         {images.length > 0 && images.length % 12 === 0 && (
           <Button onClick={this.fetchImages}></Button>
         )}
